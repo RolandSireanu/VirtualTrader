@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <title>Trader</title>
+    </head>
+    <body>
+        <ul>
+            {% for c in coins %}
+                <li>{{ c.0 }} : {{ c.1 }}$</li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
