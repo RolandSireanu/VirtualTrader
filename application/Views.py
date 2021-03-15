@@ -11,10 +11,18 @@ import ipdb
 def main_route():
     return redirect("/login")
 
+@app.route("/index")
+def index():
+    return render_template("index.html");
+
+@app.route("/register", methods=["GET","POST"])
+def register():
+    return render_template("register.html")
+
 @app.route("/dashboard")
 def dashboard():
     if("user" in session):
-        return render_template("dashboard.html", coins=cryptoReader.readPrices())
+        return render_template("index.html", coins=cryptoReader.readPrices())
     else:
         return redirect(url_for("login"));
 
@@ -27,6 +35,7 @@ def login():
         msg = "";
         username = request.form.get("usr");
         password = request.form.get("pswd");
+
         
         if(username == "" or password == ""):
             valid = False;
