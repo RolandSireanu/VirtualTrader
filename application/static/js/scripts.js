@@ -20,3 +20,45 @@
         $("body").toggleClass("sb-sidenav-toggled");
     });
 })(jQuery);
+
+function showVal(newVal, compId){
+    var temp = "valBox".concat(compId.slice(1,compId.length))
+    console.log(temp)
+    document.getElementById(temp).innerHTML=newVal;
+}
+
+function buy(compId){
+    let id = compId.slice(1,compId.length);
+    let howMany = document.getElementById("valBox".concat(id)).innerHTML
+    let coin = document.getElementById("c".concat(id)).innerHTML
+    let price = document.getElementById("p".concat(id)).innerHTML
+    let user = document.getElementById("LoggedInAs").innerHTML
+
+    let entry = {
+        quantity: howMany,
+        coin: coin,
+        price: price,
+        action: "buy"
+    };
+
+    fetch(`${window.origin}/api`,{
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(entry),
+        cache: "no-cache",
+        headers: new Headers({
+            "content-type": "application/json"
+        })
+    }).then(function(resp){
+        if(resp.status !== 200){
+            console.log("Return status is not OK ! ");
+            return;
+        }
+
+        resp.json().then(function (data){
+            console.log(data);
+        });
+
+        location.reload();
+    })
+}

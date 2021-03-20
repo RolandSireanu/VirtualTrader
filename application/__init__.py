@@ -6,13 +6,13 @@ from .RestApi import CryptoReader
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(os.getcwd(), 'application/resources/app.db')
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-app.permanent_session_lifetime = timedelta(minutes=5);
+if (os.getenv("FLASK_ENV") == "Development"):
+        app.config.from_object("application.config.DevelopmentEnv");
+elif (os.getenv("FLASK_ENV") == "Testing"):
+        app.config.from_object("application.config.TestingEnv");
+else:
+        pass
 
-print('sqlite:///' + os.path.join(os.getcwd(), 'resources/app.db'))
 db = SQLAlchemy(app);
 cryptoReader = CryptoReader();
 

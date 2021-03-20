@@ -1,8 +1,10 @@
 from . import app, db
 from . import resources
-from .Models import UserModel
-from flask import redirect, render_template, request, url_for, session
+from .Models import UserModel, Coins
+from flask import redirect, render_template, request, url_for, session, make_response, jsonify
 from . import cryptoReader
+from . import ProcesessRequest
+import secrets
 import ipdb
 
 
@@ -11,18 +13,53 @@ import ipdb
 def main_route():
     return redirect("/login")
 
-@app.route("/index")
-def index():
-    return render_template("index.html");
+@app.route("/api", methods=["POST"])
+def buy():
+    
+    if(request.is_json):
+        if(request.cookies.get("tooken") == session.get("tooken")):
+            data = request.get_json();
+            ProcesessRequest.Buy(data["coin"], float(data["price"]), session["user"], int(data["quantity"]));
+        else:
+            return make_response(jsonify({"message":"Please log in first"}), 400)
+    else:
+        print("Warning: request doesn't contain json !")
+        return redirect(url_for("login"));
+        
+    
+    r = make_response(jsonify({"message":"Everything is ok !"}), 200)
+    res = make_response(redirect(url_for("dashboard")))
+
+    return res;
 
 @app.route("/register", methods=["GET","POST"])
 def register():
+    if request.method == "POST":
+        username = request.form.get("username");
+        pswd = request.form.get("pswd");
+        secondPswd = request.form.get("secondPswd");
+
+        if(pswd != secondPswd):
+            return render_template("register.html",valid="is-invalid", message="Passwords doesn't match !")
+        
+        userModel = UserModel.query.filter_by(username=username).first();
+        if(userModel is None):
+            ProcesessRequest.AddUserToDB(username=username, password=pswd);
+            
+
+            
+            return redirect(url_for("login"));
+        else:
+            return render_template("register.html", valid="is-invalid", message="User already exists !")
+
+
     return render_template("register.html")
 
 @app.route("/dashboard")
 def dashboard():
     if("user" in session):
-        return render_template("index.html", coins=cryptoReader.readPrices())
+        userModel = UserModel.query.filter_by(username=session.get("user")).first();
+        return render_template("index.html", coins=cryptoReader.readPrices(), user=session["user"], money=round(userModel.money,2))
     else:
         return redirect(url_for("login"));
 
@@ -44,9 +81,12 @@ def login():
             usr = UserModel.query.filter_by(username=username).first()
             if usr is not None:
                 if usr.password == password:
-                    session.permanent = True;
                     session["user"] = usr.username;
-                    return redirect(url_for("dashboard"))
+                    res = make_response(redirect(url_for("dashboard")))
+                    token = secrets.token_hex(nbytes=4);
+                    session["token"] = token;
+                    res.set_cookie(key="token",value=token, expires="None",path="/", secure="False");
+                    return res
                 else:
                     valid = False;
                     msg = "Invalid username or password";
