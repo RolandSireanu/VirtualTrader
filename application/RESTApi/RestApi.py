@@ -1,6 +1,8 @@
 import requests
 import json 
 
+import ipdb
+
 class CryptoReader:
 
     url = "https://coingecko.p.rapidapi.com/simple/price"
@@ -10,7 +12,6 @@ class CryptoReader:
     }
 
     def readPrices(self):
-        
         querystring = {"ids":"bitcoin,ethereum,cardano,ripple,monero","vs_currencies":"usd"}
         response = requests.request("GET", CryptoReader.url, headers=CryptoReader.headers, params=querystring)
         data = json.loads(response.text);

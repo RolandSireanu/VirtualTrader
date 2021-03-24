@@ -1,7 +1,7 @@
 from . import app, db
 from . import resources
 from .Models import UserModel, Coins
-from flask import redirect, render_template, request, url_for, session, make_response, jsonify
+from flask import redirect, render_template, request, url_for, session, make_response, jsonify, flash
 from . import cryptoReader
 from . import ProcesessRequest
 import secrets
@@ -13,24 +13,7 @@ import ipdb
 def main_route():
     return redirect("/login")
 
-@app.route("/api", methods=["POST"])
-def buy():
-    
-    if(request.is_json):
-        if(request.cookies.get("tooken") == session.get("tooken")):
-            data = request.get_json();
-            ProcesessRequest.Buy(data["coin"], float(data["price"]), session["user"], int(data["quantity"]));
-        else:
-            return make_response(jsonify({"message":"Please log in first"}), 400)
-    else:
-        print("Warning: request doesn't contain json !")
-        return redirect(url_for("login"));
-        
-    
-    r = make_response(jsonify({"message":"Everything is ok !"}), 200)
-    res = make_response(redirect(url_for("dashboard")))
 
-    return res;
 
 @app.route("/register", methods=["GET","POST"])
 def register():
@@ -59,25 +42,26 @@ def register():
 def dashboard():
     if("user" in session):
         userModel = UserModel.query.filter_by(username=session.get("user")).first();
-        return render_template("index.html", coins=cryptoReader.readPrices(), user=session["user"], money=round(userModel.money,2))
+        prices = cryptoReader.readPrices()
+        howMany = userModel.coinsOwned[0].getCoins()
+        coins = [(p[0],p[1],howMany[p[0]]) for p in prices]
+        return render_template("index.html", coins=coins, user=session["user"], money=round(userModel.money,2))
     else:
         return redirect(url_for("login"));
 
 @app.route("/login", methods=["GET","POST"])
 def login():
+
     if request.method == "GET":
         return render_template("login.html",valid="")
     elif request.method == "POST":
-        valid = True;
-        msg = "";
         username = request.form.get("usr");
         password = request.form.get("pswd");
 
-        
         if(username == "" or password == ""):
-            valid = False;
-            msg = "Fill in username and password !";
+            flash("Fill in username and password !","danger")
         else:
+            print(UserModel.query.all())
             usr = UserModel.query.filter_by(username=username).first()
             if usr is not None:
                 if usr.password == password:
@@ -88,11 +72,11 @@ def login():
                     res.set_cookie(key="token",value=token, expires="None",path="/", secure="False");
                     return res
                 else:
-                    valid = False;
-                    msg = "Invalid username or password";
+                    flash("Invalid username or password", "danger")
             else:
                 valid = False;
-                msg = "Invalid username or password";            
+                flash("User doesn't exists in database","danger")
+                 
         
-        return render_template("login.html",valid="is-invalid",message=msg);
+        return render_template("login.html",valid="is-invalid");
     

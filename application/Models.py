@@ -1,4 +1,5 @@
 from . import db 
+from collections import namedtuple
 
 
 class UserModel(db.Model):
@@ -23,14 +24,23 @@ class Coins(db.Model):
 
     userOwner = db.relationship("UserModel", back_populates="coinsOwned", uselist=True)
 
+    def getCoins(self):
+        coins = {
+            "bitcoin": self.btc,
+            "ethereum": self.eth,
+            "cardano": self.ada,
+            "ripple": self.xrp,
+            "monero": self.xmr
+        };
+        
+        return coins;
+
     def __repr__(self):
         return f"Coins('{self.eth}')"
 
     
     
 
-
-db.create_all()
 
 # print(UserModel.query.all())
 

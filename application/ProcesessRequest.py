@@ -11,17 +11,31 @@ textToAcronym = {
 };
 
 
-def Buy(coin, price, user, quantity):
+def Transaction(coin, price, user, quantity, action):
 
-    curentUser = UserModel.query.filter_by(username=user).first()
+    currentUser = UserModel.query.filter_by(username=user).first()
+    print("Action : " + action)
+    if(action == "buy"):
+        if((quantity * price) <= currentUser.money):
+            newValue = getattr(currentUser.coinsOwned[0],textToAcronym[coin]) + quantity; 
+            setattr(currentUser.coinsOwned[0],textToAcronym[coin], newValue);
+            currentUser.money = currentUser.money - (quantity*price);
+            db.session.commit();
+        else:
+            print("Not enough money !")
+    elif(action == "sell"):
+        print("Sell action ! ")
+        howManyCoinsIOwn = getattr(currentUser.coinsOwned[0], textToAcronym[coin]);
+        if(quantity <= howManyCoinsIOwn):
+            print("HowManyCoinsIOwn : " + str(howManyCoinsIOwn))
+            setattr(currentUser.coinsOwned[0],textToAcronym[coin], howManyCoinsIOwn - quantity);
+            currentUser.money = currentUser.money + (quantity * price)
+            db.session.commit();
+        else:
+            print("You don't own enough coins ! ")
 
-    if((quantity * price) <= curentUser.money):
-        newValue = getattr(curentUser.coinsOwned[0],textToAcronym[coin]) + quantity; 
-        setattr(curentUser.coinsOwned[0],textToAcronym[coin], newValue);
-        curentUser.money = curentUser.money - (quantity*price);
-        db.session.commit();
     else:
-        print("Not enough money !")
+        print("ERROR: Undefined action ! ");
     
     
     
@@ -33,4 +47,8 @@ def AddUserToDB(username, password):
     coinModel.userOwner.append(user);
     db.session.add(coinModel)
     db.session.commit();
+    
+def GetCryptoFromDB(username):
+    currentUser = UserModel.query.filter_by(username=username).first()
+    return currentUser.coinsOwned[0].getCoins()
     

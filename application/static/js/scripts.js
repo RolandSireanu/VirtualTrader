@@ -22,23 +22,47 @@
 })(jQuery);
 
 function showVal(newVal, compId){
-    var temp = "valBox".concat(compId.slice(1,compId.length))
-    console.log(temp)
-    document.getElementById(temp).innerHTML=newVal;
+
+    let elementToUpdate;
+
+    if(compId.slice(1,2) === "b"){
+        elementToUpdate = "valBoxB".concat(compId.slice(2,compId.length))
+    }
+    else
+    {
+        elementToUpdate = "valBoxS".concat(compId.slice(2,compId.length))
+    }
+    
+    document.getElementById(elementToUpdate).innerHTML=newVal;
 }
 
-function buy(compId){
+function Transaction(compId){
     let id = compId.slice(1,compId.length);
-    let howMany = document.getElementById("valBox".concat(id)).innerHTML
+    let act = 0;
+    let howMany;
     let coin = document.getElementById("c".concat(id)).innerHTML
     let price = document.getElementById("p".concat(id)).innerHTML
     let user = document.getElementById("LoggedInAs").innerHTML
+    
+    console.log(compId.slice(0,1));
+
+    if('s' === compId.slice(0,1)){
+        act = "sell"
+        console.log("Sell actions")
+        howMany = document.getElementById("valBoxS".concat(id)).innerHTML
+    }
+    else
+    {
+        console.log("Buy actions")
+        howMany = document.getElementById("valBoxB".concat(id)).innerHTML
+        act = "buy"
+    }
 
     let entry = {
         quantity: howMany,
         coin: coin,
         price: price,
-        action: "buy"
+        action: act
     };
 
     fetch(`${window.origin}/api`,{
