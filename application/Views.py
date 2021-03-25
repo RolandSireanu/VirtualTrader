@@ -49,6 +49,15 @@ def dashboard():
     else:
         return redirect(url_for("login"));
 
+@app.route("/layout-static")
+def layoutStatic():
+    return render_template("layout-static.html")
+
+@app.route("/layout-sidenav-light")
+def layoutSideNav():
+    return render_template("layout-sidenav-light.html")
+
+
 @app.route("/login", methods=["GET","POST"])
 def login():
 
