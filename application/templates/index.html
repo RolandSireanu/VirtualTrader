@@ -41,7 +41,7 @@
                         <a class="dropdown-item" href="#">Settings</a>
                         <a class="dropdown-item" href="#">Activity Log</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="login.html">Logout</a>
+                        <a class="dropdown-item" href="logout">Logout</a>
                     </div>
                 </li>
             </ul>
@@ -142,7 +142,13 @@
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item">Account: {{ c.2 }}</li>
                                         {% set v=c.1 * c.2 %}
-                                        <li class="list-group-item">Value: {{ v|round(2,'floor') }} $</li>
+                                        <li class="list-group-item">{{ v|round(2,'floor') }} $</li>
+                                        {% set coinTotal=total[c.0]|round(2,'floor') %}
+                                        {% if coinTotal < 0 %}
+                                            <li class="list-group-item" style="color:red;"> {{ coinTotal }} $ </li>
+                                        {% else %} 
+                                            <li class="list-group-item" style="color:green;"> {{ coinTotal }} $ </li>
+                                        {%endif %}
                                       </ul>
                                 </div>
                             </div>
@@ -150,38 +156,39 @@
                         </div>
                         
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                  <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                  <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
-                                </li>
-                                <li class="nav-item">
-                                  <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
-                                </li>
-                              </ul>
-                              <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                    
-                                        <!-- <div class="card mb-4">
-                                            <div class="card-header">
-                                                <i class="fas fa-chart-bar mr-1"></i>
-                                                Bar Chart Example
-                                            </div>
-                                            <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-                                        </div> -->
+                                {% for c in coins %} 
+                                    {% if loop.first %} 
+                                        {% set selected = 'true' %}
+                                        {% set active = 'active' %}
+                                    {% else %} 
+                                    {% set active = '' %}
+                                        {% set selected = 'false' %}
+                                    {% endif %}
+                                    <li class="nav-item">
+                                    <a class="nav-link {{ active }}" id="{{ c.0 }}-tab" data-toggle="tab" href="#{{ c.0 }}-chart" role="tab" aria-controls="{{ c.0 }}" aria-selected="{{ selected }}">{{ c.0 }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                {% for c in coins %}
+                                {% if loop.first %}
+                                    {% set sa = 'show active' %}
+                                {% else %}
+                                    {% set sa = '' %}
+                                {% endif %}
+                                    <div class="tab-pane fade {{ sa }}" id="{{ c.0 }}-chart" role="tabpanel" aria-labelledby="{{ c.0 }}-tab">
                                         <div class="card mb-4">
                                             <div class="card-header">
                                                 <i class="fas fa-chart-area mr-1"></i>
-                                                Area Chart Example
+                                                Chart {{ c.0 }} 
                                             </div>
-                                            <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-                                        </div>
-                                    
-                                </div>
-                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
-                              </div>
+                                            <div class="card-body"><canvas id="{{ c.0 }}-AreaChart" width="100%" height="40"></canvas></div>
+                                        </div>                                    
+                                    </div>
+                                    <!-- <div class="tab-pane fade" id="monero" role="tabpanel" aria-labelledby="monero-tab">...</div>
+                                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div> -->
+                                {% endfor %}
+                            </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
@@ -222,12 +229,24 @@
                                                 <td>
                                                     <div class="container">
                                                         <div class="row">
-                                                            <div class="col-4">
-                                                                <input type="range" style="width: 100%;"
-                                                                    oninput="showVal(this.value, this.id)"
-                                                                    class="form-range" min="0"
-                                                                    max="{{ money//c.1 }}"" value=" 0"
-                                                                    id="rb{{ loop.index }}">
+                                                            <div class="col-6">
+                                                                <div class="container">
+                                                                    <div class="row">
+                                                                        <input type="range" style="width: 100%;"
+                                                                            oninput="showVal(this.value, this.id)"
+                                                                            class="form-range" min="0"
+                                                                            max="{{ money//c.1 }}"" value="0"
+                                                                            id="rb{{ loop.index }}">
+                                                                    </div>
+                                                                    <div class="row">                                                                
+                                                                        <div class="input-group mb-1 mt-2">
+                                                                            <div class="input-group-prepend">
+                                                                              <span class="input-group-text">$</span>
+                                                                              <span class="input-group-text" style="color:red; font-size:small;" id="moneySpent-{{ loop.index }}">0.00</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <div class="col">
                                                                 <center>
@@ -242,12 +261,24 @@
                                                 </td>
                                                 <td>
                                                     <div class="container">
-                                                        <div class="row">
-                                                            <div class="col-4">
-                                                                <input type="range" style="width: 100%;"
-                                                                    oninput="showVal(this.value, this.id)"
-                                                                    class="form-range" min="0" max="{{ c.2 }}"" value=" 0"
-                                                                    id="rs{{ loop.index }}">
+                                                        <div class="row">                                    
+                                                            <div class="col-6">
+                                                                <div class="container">
+                                                                    <div class="row">
+                                                                        <input type="range" style="width: 100%;"
+                                                                            oninput="showVal(this.value, this.id)"
+                                                                            class="form-range" min="0" max="{{ c.2 }}"" value="0"
+                                                                            id="rs{{ loop.index }}">
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="input-group mb-1 mt-2">
+                                                                            <div class="input-group-prepend">
+                                                                              <span class="input-group-text">$</span>
+                                                                              <span class="input-group-text" style="color:green; font-size:small;" id="moneyGained-{{ loop.index }}">0.00</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <div class="col">
                                                                 <center>

@@ -9,6 +9,8 @@ class UserModel(db.Model):
     money = db.Column(db.Float, nullable=False)
     
     coinsOwned = db.relationship("Coins", back_populates="userOwner", uselist=True, foreign_keys="[Coins.uid]")
+    myTractions = db.relationship("TransactionModel", back_populates="userOwnerTransaction", uselist=True, foreign_keys="[TransactionModel.uid]");
+
 
     def __repr__(self):
         return f"User('{self.username}','{self.money}')";
@@ -39,7 +41,16 @@ class Coins(db.Model):
         return f"Coins('{self.eth}')"
 
     
-    
+class TransactionModel(db.Model):
+    id = db.Column(db.Integer, primary_key=True);
+    uid = db.Column(db.Integer, db.ForeignKey("user_model.id"));
+    coinType = db.Column(db.String, default="");
+    action = db.Column(db.Integer, default=-1);
+    amount = db.Column(db.Integer, default=0);
+    money = db.Column(db.Float, default=0.0);
+
+    userOwnerTransaction = db.relationship("UserModel");    
+
 
 
 # print(UserModel.query.all())

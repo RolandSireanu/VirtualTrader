@@ -24,7 +24,9 @@ def register():
 
         if(pswd != secondPswd):
             return render_template("register.html",valid="is-invalid", message="Passwords doesn't match !")
-        
+        if(pswd == "" or secondPswd == ""):
+            return render_template("register.html",valid="is-invalid", message="Please fill in password field !");
+
         userModel = UserModel.query.filter_by(username=username).first();
         if(userModel is None):
             ProcesessRequest.AddUserToDB(username=username, password=pswd);
@@ -41,11 +43,24 @@ def register():
 @app.route("/dashboard")
 def dashboard():
     if("user" in session):
+        #Get current user from database
         userModel = UserModel.query.filter_by(username=session.get("user")).first();
+
+        #Read coins value from rest api 
         prices = cryptoReader.readPrices()
+
+        #Read how many coins current user posses 
         howMany = userModel.coinsOwned[0].getCoins()
+
+        #Read all transactions associated with current user
+        transactions = userModel.myTractions;
+
+        total = ProcesessRequest.computeTotal(transactions, howMany, prices);
+        
+        print(len(transactions));
+
         coins = [(p[0],p[1],howMany[p[0]]) for p in prices]
-        return render_template("index.html", coins=coins, user=session["user"], money=round(userModel.money,2))
+        return render_template("index.html", coins=coins, user=session["user"], money=round(userModel.money,2), total=total);
     else:
         return redirect(url_for("login"));
 
@@ -88,4 +103,14 @@ def login():
                  
         
         return render_template("login.html",valid="is-invalid");
+    
+@app.route("/logout", methods=["GET"])
+def logout():
+
+    resp = make_response(redirect(url_for("login")));
+    resp.set_cookie("token",expires=0);
+    session.pop("user");
+
+
+    return resp;
     

@@ -24,13 +24,21 @@
 function showVal(newVal, compId){
 
     let elementToUpdate;
+    let rowNumber = compId.slice(2,compId.length);
 
     if(compId.slice(1,2) === "b"){
-        elementToUpdate = "valBoxB".concat(compId.slice(2,compId.length))
+        elementToUpdate = "valBoxB".concat(rowNumber)
+        let price = document.getElementById("p".concat(rowNumber));
+        console.log("price = " + price);
+        document.getElementById("moneySpent-"+rowNumber).innerHTML = parseFloat(parseFloat(newVal) * parseFloat(price.innerHTML)).toFixed(2); 
     }
     else
     {
         elementToUpdate = "valBoxS".concat(compId.slice(2,compId.length))
+        let price = document.getElementById("p".concat(rowNumber)).innerHTML;
+        
+        console.log(parseFloat(newVal) * parseFloat(price));
+        document.getElementById("moneyGained-"+rowNumber).innerHTML = parseFloat(parseFloat(newVal) * parseFloat(price)).toFixed(2);
     }
     
     document.getElementById(elementToUpdate).innerHTML=newVal;
