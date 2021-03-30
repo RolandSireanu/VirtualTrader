@@ -1,0 +1,10 @@
+docker run -d --name postgres-db -e POSTGRES_PASSWORD=1234 -v ${HOME}/postgresDB/:/var/lib/postgresql/data -p 5432:5432 postgres
+docker exec -it postgres-db bash
+docker run -p 80:80 -e PGADMIN_DEFAULT_EMAIL=sireanu.roland@gmail.com -e PGADMIN_DEFAULT_PASSWORD=1234 --name pgadmin-dev -d dpage/pgadmin4
+
+export DATABASE_URL="postgresql://postgres:1234@localhost:5432/trader"
+
+===== Migration ===
+python3 manage.py db init
+python3 manage.py db upgrade
+python3 manage.py db migrate

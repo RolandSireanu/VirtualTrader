@@ -20,7 +20,7 @@ def Transaction(coin, price, user, quantity, action):
             newValue = getattr(currentUser.coinsOwned[0],textToAcronym[coin]) + quantity; 
             setattr(currentUser.coinsOwned[0],textToAcronym[coin], newValue);
             currentUser.money = currentUser.money - (quantity*price);
-            transaction=TransactionModel(uid=currentUser.id, coinType=coin, action=0, amount=quantity, money=quantity*price);
+            transaction=TransactionModel(uid=currentUser.id, coinType=coin, action=0, amount=quantity, price=price, money=quantity*price);
             currentUser.myTractions.append(transaction);
             db.session.commit();
         else:
@@ -56,7 +56,7 @@ def GetCryptoFromDB(username):
     return currentUser.coinsOwned[0].getCoins()
     
 def computeTotal(trans, nrOfCoins, priceList):
-
+    
     returnData = {}
     priceDict = dict(priceList);
 
@@ -66,5 +66,5 @@ def computeTotal(trans, nrOfCoins, priceList):
             if(t.coinType == k):
                 money = money + ((t.money * -1) if t.action == 0 else t.money);
         returnData[k] = money + (priceDict[k]*nrOfCoins[k]);
-        
+
     return returnData

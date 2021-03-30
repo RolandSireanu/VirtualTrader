@@ -47,12 +47,13 @@ class TransactionModel(db.Model):
     coinType = db.Column(db.String, default="");
     action = db.Column(db.Integer, default=-1);
     amount = db.Column(db.Integer, default=0);
+    price = db.Column(db.Float, default=0.0);
     money = db.Column(db.Float, default=0.0);
 
     userOwnerTransaction = db.relationship("UserModel");    
 
 
-
+# db.create_all();
 # print(UserModel.query.all())
 
 # u1 = UserModel(username="Roland", password="1234")

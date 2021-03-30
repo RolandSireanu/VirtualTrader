@@ -4,8 +4,7 @@ import os
 
 class BaseConfig(object):
     SECRET_KEY="fwv32frw242ef39";
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(os.getcwd(), 'application/resources/app.db')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL');
     SQLALCHEMY_TRACK_MODIFICATIONS = False 
     DEBUG = False
     TESTING = False

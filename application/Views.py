@@ -60,6 +60,8 @@ def dashboard():
         print(len(transactions));
 
         coins = [(p[0],p[1],howMany[p[0]]) for p in prices]
+        coins.sort(key = lambda e : e[0]);
+
         return render_template("index.html", coins=coins, user=session["user"], money=round(userModel.money,2), total=total);
     else:
         return redirect(url_for("login"));
