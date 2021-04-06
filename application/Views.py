@@ -23,16 +23,13 @@ def register():
         secondPswd = request.form.get("secondPswd");
 
         if(pswd != secondPswd):
-            return render_template("register.html",valid="is-invalid", message="Passwords doesn't match !")
+            return render_template("register.html",valid="is-invalid", message="Passwords doesn't match !", userBackup=username)
         if(pswd == "" or secondPswd == ""):
-            return render_template("register.html",valid="is-invalid", message="Please fill in password field !");
+            return render_template("register.html",valid="is-invalid", message="Please fill in password field !", userBackup=username);
 
         userModel = UserModel.query.filter_by(username=username).first();
         if(userModel is None):
-            ProcesessRequest.AddUserToDB(username=username, password=pswd);
-            
-
-            
+            ProcesessRequest.AddUserToDB(username=username, password=pswd);            
             return redirect(url_for("login"));
         else:
             return render_template("register.html", valid="is-invalid", message="User already exists !")
@@ -52,6 +49,11 @@ def dashboard():
         #Read how many coins current user posses 
         howMany = userModel.coinsOwned[0].getCoins()
 
+        #Read all transactions 
+        transactions = userModel.myTractions;
+        dictOfPackages = ProcesessRequest.buildDictOfPackages(transactions, prices);
+        print(dictOfPackages);
+
         #Read all transactions associated with current user
         transactions = userModel.myTractions;
 
@@ -62,7 +64,7 @@ def dashboard():
         coins = [(p[0],p[1],howMany[p[0]]) for p in prices]
         coins.sort(key = lambda e : e[0]);
 
-        return render_template("index.html", coins=coins, user=session["user"], money=round(userModel.money,2), total=total);
+        return render_template("index.html", coins=coins, user=session["user"], money=round(userModel.money,2), total=total, dictOfPackages=dictOfPackages);
     else:
         return redirect(url_for("login"));
 
@@ -104,7 +106,7 @@ def login():
                 flash("User doesn't exists in database","danger")
                  
         
-        return render_template("login.html",valid="is-invalid");
+        return render_template("login.html",valid="is-invalid", userBackup=username);
     
 @app.route("/logout", methods=["GET"])
 def logout():

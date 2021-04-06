@@ -1,47 +1,37 @@
-import requests
-import json 
-import time
-
-import ipdb
-
-class CryptoReader:
-
-    url = "https://coingecko.p.rapidapi.com"
-    headers = {
-    'x-rapidapi-key': "1057bfb784msh8fa5180c3b466bdp1802bcjsnf6263a56e4b1",
-    'x-rapidapi-host': "coingecko.p.rapidapi.com"
-    }
-    coinsRequested = ["bitcoin","ethereum","cardano","ripple","monero"]
-
-    def readPrices(self):
-        endPoint = "/simple/price"
-        querystring = {"ids":",".join(CryptoReader.coinsRequested),"vs_currencies":"usd"}
-        data = self.__makeGetRequest(CryptoReader.url+endPoint, CryptoReader.headers, querystring);
-        return [(k,v["usd"]) for k,v in data.items()];
-
-    # def readStats(self):
-    #     for c in CryptoReader.coinsRequested:
-
-    #         endPoint = f"/coins/{c}/market_chart/range";
-    #         startPoint = (int)time.time() - (3600*24*30);
-    #         now = (int)time.time();
-            
-
-    #         querystring = {"from":str(startPoint),"vs_currency":"usd","to":str(now)}
-    #         data = __makeGetRequest(CryptoReader.url+endPoint, CryptoReader.headers, querystring);
-
-    #     pass
-
-    def __makeGetRequest(self, url, headers, params):
-        response = requests.request("GET", url, headers=headers, params=params)
-        data = json.loads(response.text)
-        return data;
-
-# url = "https://coingecko.p.rapidapi.com/coins/bitcoin/market_chart/range"
+from .. import ProcesessRequest
+from .. import app
+from flask import request, redirect, make_response, jsonify, url_for, session
 
 
+@app.route("/api/coins", methods=["POST"])
+@app.route("/api/coins/<int:stock_id>", methods=["DELETE"])
+def coinsEndpoint(stock_id=None):
 
-# headers = {
-#     'x-rapidapi-key': "1057bfb784msh8fa5180c3b466bdp1802bcjsnf6263a56e4b1",
-#     'x-rapidapi-host': "coingecko.p.rapidapi.com"
-#     }
+    if(request.method == "POST"):
+        if(request.is_json):
+            if(request.cookies.get("tooken") == session.get("tooken")):
+                data = request.get_json();
+                print(data)                
+                ProcesessRequest.Transaction(data["coin"], session["user"], int(data["quantity"]), "buy");
+                return make_response(jsonify({"message":"success"}), 200);
+            else:
+                return make_response(jsonify({"message":"Please log in first"}), 400)
+        else:
+            return make_response(jsonify({"message":"Request doesn't contain json !"}),400);
+    elif(request.method == "DELETE"):
+        if(request.is_json):
+            if(request.cookies.get("tooken") == session.get("tooken")):
+                data = request.get_json();
+                ProcesessRequest.Transaction(data["coin"], session["user"], int(data["quantity"]), "sell", pricePaid=data["pricePaid"], transactionId=stock_id);    
+                return make_response(jsonify({"message":"success"}), 200);
+    else:
+        print("Operation not supported !");
+
+
+@app.route("/api/wallet", methods=["GET"])
+def walletEndpoint():
+    if(request.cookies.get("tooken") == session.get("tooken")):
+        crypto = ProcesessRequest.GetCryptoFromDB(session["user"]);
+        return make_response(jsonify(crypto), 200);
+
+    return make_response(400);

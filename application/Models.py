@@ -45,13 +45,20 @@ class TransactionModel(db.Model):
     id = db.Column(db.Integer, primary_key=True);
     uid = db.Column(db.Integer, db.ForeignKey("user_model.id"));
     coinType = db.Column(db.String, default="");
-    action = db.Column(db.Integer, default=-1);
     amount = db.Column(db.Integer, default=0);
     price = db.Column(db.Float, default=0.0);
     money = db.Column(db.Float, default=0.0);
 
     userOwnerTransaction = db.relationship("UserModel");    
 
+
+class PricesModel(db.Model):
+    id = db.Column(db.Integer, primary_key=True);
+    bitcoin = db.Column(db.Float, default=0.0)
+    ethereum = db.Column(db.Float, default=0.0)
+    cardano = db.Column(db.Float, default=0.0)
+    ripple = db.Column(db.Float, default=0.0)
+    monero = db.Column(db.Float, default=0.0)
 
 # db.create_all();
 # print(UserModel.query.all())

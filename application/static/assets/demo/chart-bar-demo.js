@@ -9,7 +9,7 @@ var ctx = document.getElementById("myBarChart");
 
 async function GetCryptoFromApi2(){
 
-  let resp = await fetch(`${window.origin}/api?crypto=all`,{
+  let resp = await fetch(`${window.origin}/api/wallet`,{
     method: "GET",
     credentials: "include",
     cache: "no-cache",
