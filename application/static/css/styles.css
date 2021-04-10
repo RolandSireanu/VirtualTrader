@@ -73,6 +73,37 @@ body {
   outline: 0 !important;
 }
 
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-item-left {
+  flex: 50%;
+  padding: 5px;
+  
+  width: 50%;
+}
+
+.flex-item-right {
+  flex: 50%;
+  padding: 5px;
+  
+  width: 50%;
+}
+
+@media (max-width: 2000px) {
+  .flex-container {
+    flex-direction: column;
+  }
+
+  .flex-item-left, .flex-item-right {
+    width: 100%;
+  }
+}
+
+
 hr {
   box-sizing: content-box;
   height: 0;

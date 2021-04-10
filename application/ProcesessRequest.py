@@ -2,6 +2,7 @@ from . import db
 from .CryptoReader import CryptoReader
 from .Models import UserModel, Coins, TransactionModel
 import ipdb
+import pprint
 
 textToAcronym = {
     "bitcoin":"btc",
@@ -94,3 +95,40 @@ def buildDictOfPackages(transactions, prices):
             result[t.coinType] = [element];
 
     return result;
+
+def buildAccountsDict(prices):
+    startMoney = 100000;
+
+    usrs = UserModel.query.all();
+    result = dict();
+
+    for usr in usrs:
+        coinsValue = 0;
+        result[usr.username]={};
+
+        for p in prices:
+            owned = getattr(usr.coinsOwned[0],textToAcronym[p[0]]);
+            coinsValue = coinsValue + owned * p[1];
+        result[usr.username]["coinsValue"] = coinsValue;
+        result[usr.username]["money"] = usr.money;
+        result[usr.username]["profitPerCoin"] = {}
+
+        transactions = buildDictOfPackages(usr.myTractions, prices);
+
+        for coin, acronym in textToAcronym.items():
+            paidMoneyOnCurrentCoin = sum([t[1] for t in transactions.get(coin,[])])
+            owned = getattr(usr.coinsOwned[0],textToAcronym[coin]);
+            dictPrices = dict(prices);
+            
+            
+            result[usr.username]["profitPerCoin"][coin] = (paidMoneyOnCurrentCoin, dictPrices[coin]*owned)
+
+            
+
+        
+    pprint.pprint(result)
+    return result;
+
+        
+    # result = {u.username:u.money - startMoney for u in usrs}
+    

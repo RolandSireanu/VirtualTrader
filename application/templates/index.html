@@ -19,7 +19,7 @@
 
 <body class="sb-nav-fixed"
 	style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">
-	
+
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
 		<a class="navbar-brand" href="index.html">Start Bootstrap</a>
 		<button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i
@@ -59,63 +59,9 @@
 							<div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
 							Dashboard
 						</a>
-						<div class="sb-sidenav-menu-heading">Interface</div>
-						<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts"
-							aria-expanded="false" aria-controls="collapseLayouts">
-							<div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-							Transactions
-							<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-						</a>
-						<div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-							<nav class="sb-sidenav-menu-nested nav">
-								<a class="nav-link" href="layout-static">Static Navigation</a>
-								<a class="nav-link" href="layout-sidenav-light">Light Sidenav</a>
-							</nav>
-						</div>
-						<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-							aria-expanded="false" aria-controls="collapsePages">
-							<div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-							Pages
-							<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-						</a>
-						<div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
-							<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-								<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth"
-									aria-expanded="false" aria-controls="pagesCollapseAuth">
-									Authentication
-									<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-								</a>
-								<div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
-									data-parent="#sidenavAccordionPages">
-									<nav class="sb-sidenav-menu-nested nav">
-										<a class="nav-link" href="login.html">Login</a>
-										<a class="nav-link" href="register.html">Register</a>
-										<a class="nav-link" href="password.html">Forgot Password</a>
-									</nav>
-								</div>
-								<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseError"
-									aria-expanded="false" aria-controls="pagesCollapseError">
-									Error
-									<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-								</a>
-								<div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne"
-									data-parent="#sidenavAccordionPages">
-									<nav class="sb-sidenav-menu-nested nav">
-										<a class="nav-link" href="401.html">401 Page</a>
-										<a class="nav-link" href="404.html">404 Page</a>
-										<a class="nav-link" href="500.html">500 Page</a>
-									</nav>
-								</div>
-							</nav>
-						</div>
-						<div class="sb-sidenav-menu-heading">Addons</div>
-						<a class="nav-link" href="charts.html">
-							<div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-							Charts
-						</a>
-						<a class="nav-link" href="tables.html">
-							<div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-							Tables
+						<a class="nav-link" href="leaderboard">
+							<div class="sb-nav-link-icon"><i class="fas fa-table	"></i></div>
+							LeaderBoard
 						</a>
 					</div>
 				</div>
@@ -155,46 +101,52 @@
 								{% endif %}
 								<div class="tab-pane fade {{ showAct }}" id="v-pills-{{ k }}" role="tabpanel"
 									aria-labelledby="v-pills-{{ k }}-tab">
-									<div class="container">
+									<div class="container-fluid">
 										<div class="row justify-content-between">
 											{% for package in v %}
 											<div class="col">
 												<div class="card bg-secondary mb-2" style="width: 14rem;">
-													<center><img class="card-img-top mt-3" src="static/images/{{ k }}.png" alt="Card image cap" style="width: 70px; height: 50px;"></center>
+													<center><img class="card-img-top mt-3" src="static/images/{{ k }}.png" alt="Card image cap"
+															style="width: 70px; height: 50px;"></center>
 													<div class="card-body" style="padding: 0.5rem;">
-														<h5 class="card-title"><center>{{ k }} </center></h5>
+														<h5 class="card-title">
+															<center>{{ k }} </center>
+														</h5>
 													</div>
 													<ul class="list-group list-group-flush">
 														<li class="list-group-item" style="padding: 0.5rem 0.5rem;">
 															<div class="input-group mb-1 mt-1">
 																<div class="input-group-prepend">
-																	
+
 																	<div class="input-group-text" style="font-size:small;"
-																		id="account-{{ k }}-{{ loop.index }}">Account: {{ package[0] }}</div>	
+																		id="account-{{ k }}-{{ loop.index }}">Account: {{ package[0] }}</div>
 																</div>
 															</div>
 														</li>
 														<li class="list-group-item" style="padding: 0.5rem 0.5rem;">
 															<div class="input-group mb-0 mt-0">
 																<div class="input-group-prepend">
-																	
-																<div class="input-group-text" style="font-size:small;"
-																		id="pricePaid-{{ k }}-{{ loop.index }}">Price paid : {{ package[1] }} $</div>	
-																</div>														
+
+																	<div class="input-group-text" style="font-size:small;"
+																		id="pricePaid-{{ k }}-{{ loop.index }}">Price paid : {{ package[1] }} $</div>
+																</div>
 															</div>
 														</li>
 														<li class="list-group-item" style="padding: 0.5rem 0.5rem;">
 															<div class="input-group mb-1 mt-1">
 																<div class="input-group-prepend">
-																	{% set profitLoss = package[2] - package[1] %}																	
-																	<div class="input-group-text" style="font-size:small; color: {{ 'red' if profitLoss < 0 else 'green' }};"
-																		id="igt-{{ loop.index }}">Profit/loss: {{ profitLoss|round(2,'floor') }} $</div>																			
+																	{% set profitLoss = package[2] - package[1] %}
+																	<div class="input-group-text"
+																		style="font-size:small; color: {{ 'red' if profitLoss < 0 else 'green' }};"
+																		id="igt-{{ loop.index }}">Profit/loss: {{ profitLoss|round(2,'floor') }} $</div>
 																</div>
 															</div>
 														</li>
 													</ul>
 													<div class="card-body" style="padding:0.5rem;">
-														<center><button type="button" class="btn btn-primary" onclick="SellPackage('{{ package[0] }}', '{{ package[1] }}', '{{ k }}', '{{ package[3] }}')">Sell package</button></center>
+														<center><button type="button" class="btn btn-primary"
+																onclick="SellPackage('{{ package[0] }}', '{{ package[1] }}', '{{ k }}', '{{ package[3] }}')">Sell
+																package</button></center>
 													</div>
 												</div>
 											</div>
@@ -213,178 +165,129 @@
 						</div>
 					</div>
 					<br><br>
+					<div style="width: 100%;">
+						<div class="flex-container">
 
+							<div class="flex-item-left">
+								<ul class="nav nav-tabs" id="myTab" role="tablist">
+									{% for c in coins %}
+									{% if loop.first %}
+									{% set selected = 'true' %}
+									{% set active = 'active' %}
+									{% else %}
+									{% set active = '' %}
+									{% set selected = 'false' %}
+									{% endif %}
+									<li class="nav-item">
+										<a class="nav-link {{ active }}" id="{{ c.0 }}-tab" data-toggle="tab" href="#{{ c.0 }}-chart"
+											role="tab" aria-controls="{{ c.0 }}" aria-selected="{{ selected }}">{{ c.0 }}</a>
+									</li>
+									{% endfor %}
+								</ul>
+								<div class="tab-content" id="myTabContent">
+									{% for c in coins %}
+									{% if loop.first %}
+									{% set sa = 'show active' %}
+									{% else %}
+									{% set sa = '' %}
+									{% endif %}
+									<div class="tab-pane fade {{ sa }}" id="{{ c.0 }}-chart" role="tabpanel"
+										aria-labelledby="{{ c.0 }}-tab">
+										<div class="card mb-4">
+											<div class="card-header">
+												<i class="fas fa-chart-area mr-1"></i>
+												Chart {{ c.0 }}
+											</div>
+											<div class="card-body"><canvas id="{{ c.0 }}-AreaChart" width="100%" height="40"></canvas></div>
+										</div>
+									</div>
 
-
-					<!-- <div class="row justify-content-between">
-                            {% for c in coins %} 
-                            <div class="card bg-primary border-secondary mb-4" style="width: 14rem;">
-                                <center><img class="card-img-top mt-4" src="static/images/{{ c.0 }}.png" alt="Card image cap" style="width: 90px; height: 70px;"></center>
-                                <div class="card-body">
-                                    <center><h5 class="card-title">{{ c.0 }}</h5></center>
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">Account: {{ c.2 }}</li>
-                                        {% set v=c.1 * c.2 %}
-                                        <li class="list-group-item">{{ v|round(2,'floor') }} $</li>
-                                        {% set coinTotal=total[c.0]|round(2,'floor') %}
-                                        {% if coinTotal < 0 %}
-                                            <li class="list-group-item" style="color:red;"> {{ coinTotal }} $ </li>
-                                        {% else %} 
-                                            <li class="list-group-item" style="color:green;"> {{ coinTotal }} $ </li>
-                                        {%endif %}
-                                      </ul>
-                                </div>
-                            </div>
-                            {% endfor %}                            
-                        </div> -->
-
-					<ul class="nav nav-tabs" id="myTab" role="tablist">
-						{% for c in coins %}
-						{% if loop.first %}
-						{% set selected = 'true' %}
-						{% set active = 'active' %}
-						{% else %}
-						{% set active = '' %}
-						{% set selected = 'false' %}
-						{% endif %}
-						<li class="nav-item">
-							<a class="nav-link {{ active }}" id="{{ c.0 }}-tab" data-toggle="tab" href="#{{ c.0 }}-chart" role="tab"
-								aria-controls="{{ c.0 }}" aria-selected="{{ selected }}">{{ c.0 }}</a>
-						</li>
-						{% endfor %}
-					</ul>
-					<div class="tab-content" id="myTabContent">
-						{% for c in coins %}
-						{% if loop.first %}
-						{% set sa = 'show active' %}
-						{% else %}
-						{% set sa = '' %}
-						{% endif %}
-						<div class="tab-pane fade {{ sa }}" id="{{ c.0 }}-chart" role="tabpanel" aria-labelledby="{{ c.0 }}-tab">
-							<div class="card mb-4">
-								<div class="card-header">
-									<i class="fas fa-chart-area mr-1"></i>
-									Chart {{ c.0 }}
+									{% endfor %}
 								</div>
-								<div class="card-body"><canvas id="{{ c.0 }}-AreaChart" width="100%" height="40"></canvas></div>
-							</div>
-						</div>
-						<!-- <div class="tab-pane fade" id="monero" role="tabpanel" aria-labelledby="monero-tab">...</div>
-                                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div> -->
-						{% endfor %}
-					</div>
-					<div class="card mb-4">
-						<div class="card-header">
-							<i class="fas fa-table mr-1"></i>
-							DataTable Example
-						</div>
-						<div class="card-body">
-							<div class="table-responsive">
-								<table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
-									<thead>
-										<tr>
-											<th>Cryptocoin</th>
-											<th>USD Value</th>
-											<th>Buy Quantity</th>
-											<th>Account</th>
-										</tr>
-									</thead>
-									<tfoot>
-										<tr>
-											<th>Cryptocoin</th>
-											<th>USD Value</th>
-											<th>Buy Quantity</th>											
-											<th>Account</th>
-										</tr>
-									</tfoot>
-									<tbody>
-										{% for c in coins %}
-										{% if loop.index % 2 == 0 %}
-										<tr role="row" class="odd">
-											{% else %}
-										<tr role="row" class="even">
-											{% endif %}
-											<td id="c{{ loop.index }}">{{ c.0 }}</td>
-											<td id="p{{ loop.index }}">{{ c.1 }}</td>
 
-											<td>
-												<div class="container">
-													<div class="row">
-														<div class="col-6">
+
+							</div>
+							<div class="flex-item-right">
+								<div class="card mb-4" style="display: contents;">
+									<div class="card-header">
+										<i class="fas fa-table mr-1"></i>
+										DataTable Example
+									</div>
+									<div class="card-body">
+										<div class="table-responsive">
+											<table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+												<thead>
+													<tr>
+														<th>Cryptocoin</th>
+														<th>USD Value</th>
+														<th>Buy Quantity</th>
+														<th>Account</th>
+													</tr>
+												</thead>
+												<tfoot>
+													<tr>
+														<th>Cryptocoin</th>
+														<th>USD Value</th>
+														<th>Buy Quantity</th>
+														<th>Account</th>
+													</tr>
+												</tfoot>
+												<tbody>
+													{% for c in coins %}
+													{% if loop.index % 2 == 0 %}
+													<tr role="row" class="odd">
+														{% else %}
+													<tr role="row" class="even">
+														{% endif %}
+														<td id="c{{ loop.index }}">{{ c.0 }}</td>
+														<td id="p{{ loop.index }}">{{ c.1 }}</td>
+
+														<td>
 															<div class="container">
 																<div class="row">
-																	{% if money // c.1 < 1 %}
-																		{% set disabled = "disabled" %}
-																	{% else %}
-																	{% set disabled = "" %}
-																	{% endif %}
-																	<input type="range" style="width: 100%;" oninput="showVal(this.value, this.id)"
-																		class="form-range" min="0" max="{{ money//c.1 }}" value="0"
-																		id="rb{{ loop.index }}" {{ disabled }}>
-																</div>
-																<div class="row">
-																	<div class="input-group mb-1 mt-2">
-																		<div class="input-group-prepend">
-																			<span class="input-group-text">$</span>
-																			<span class="input-group-text" style="color:red; font-size:small;"
-																				id="moneySpent-{{ loop.index }}">0.00</span>
+																	<div class="col-6">
+																		<div class="container">
+																			<div class="row">
+																				{% if money // c.1 < 1 %} {% set disabled="disabled" %} {% else %} {% set
+																					disabled="" %} {% endif %} <input type="range" style="width: 100%;"
+																					oninput="showVal(this.value, this.id)" class="form-range" min="0"
+																					max="{{ money//c.1 }}" value="0" id="rb{{ loop.index }}" {{ disabled }}>
+																			</div>
+																			<div class="row">
+																				<div class="input-group mb-1 mt-2">
+																					<div class="input-group-prepend">
+																						<span class="input-group-text">$</span>
+																						<span class="input-group-text" style="color:red; font-size:small;"
+																							id="moneySpent-{{ loop.index }}">0.00</span>
+																					</div>
+																				</div>
+																			</div>
 																		</div>
 																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col">
-															<center>
-																<button type="button" class="btn btn-primary" onclick="BuyPackage(this.id)"
-																	id="b{{ loop.index }}">
-																	Buy <span class="badge badge-success" id="valBoxB{{ loop.index }}">0</span>
-																</button>
-															</center>
-														</div>
-											</td>
-											<!-- <td> -->
-												<!-- <div class="container">
-													<div class="row">
-														<div class="col-6">
-															<div class="container">
-																<div class="row">
-																	<input type="range" style="width: 100%;" oninput="showVal(this.value, this.id)"
-																		class="form-range" min="0" max="{{ c.2 }}"" value=" 0" id="rs{{ loop.index }}">
-																</div>
-																<div class="row">
-																	<div class="input-group mb-1 mt-2">
-																		<div class="input-group-prepend">
-																			<span class="input-group-text">$</span>
-																			<span class="input-group-text" style="color:green; font-size:small;"
-																				id="moneyGained-{{ loop.index }}">0.00</span>
-																		</div>
+																	<div class="col">
+																		<center>
+																			<button type="button" class="btn btn-primary" onclick="BuyPackage(this.id)"
+																				id="b{{ loop.index }}">
+																				Buy <span class="badge badge-success" id="valBoxB{{ loop.index }}">0</span>
+																			</button>
+																		</center>
 																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col">
-															<center>
-																<button type="button" class="btn btn-primary" onclick="Transaction(this.id)"
-																	id="s{{ loop.index }}">
-																	Sell <span class="badge badge-success" id="valBoxS{{ loop.index }}">0</span>
-																</button>
-															</center>
-														</div>
-													</div>
-												</div> -->
-											<!-- </td> -->
-											<td id="a{{ loop.index }}">
-												{{ c.2 }}
-											</td>
+														</td>
+														<td id="a{{ loop.index }}">
+															{{ c.2 }}
+														</td>
 
-											{% endfor %}
-										</tr>
-									</tbody>
-								</table>
+														{% endfor %}
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
 							</div>
+
 						</div>
 					</div>
-				</div>
 			</main>
 			<footer class="py-4 bg-light mt-auto">
 				<div class="container-fluid">

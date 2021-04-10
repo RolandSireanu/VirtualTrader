@@ -43,8 +43,6 @@ class CryptoReader:
 
     def readPrices(self):
         pricesModel = Models.PricesModel.query.first();
-        
-
         return [(k,getattr(pricesModel, k)) for k in CryptoReader.coinsRequested];
 
     # def readStats(self):

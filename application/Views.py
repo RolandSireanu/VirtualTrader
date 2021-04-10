@@ -37,6 +37,14 @@ def register():
 
     return render_template("register.html")
 
+@app.route("/leaderboard")
+def leaderboard():
+
+    #Read coins value from rest api 
+    prices = cryptoReader.readPrices()
+    accounts = ProcesessRequest.buildAccountsDict(prices=prices);    
+    return render_template("tables.html",accounts=accounts);
+
 @app.route("/dashboard")
 def dashboard():
     if("user" in session):
