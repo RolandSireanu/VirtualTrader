@@ -1,6 +1,7 @@
 from . import db
 from .CryptoReader import CryptoReader
 from .Models import UserModel, Coins, TransactionModel
+from collections import OrderedDict
 import ipdb
 import pprint
 
@@ -109,9 +110,11 @@ def buildAccountsDict(prices):
         for p in prices:
             owned = getattr(usr.coinsOwned[0],textToAcronym[p[0]]);
             coinsValue = coinsValue + owned * p[1];
+        result[usr.username]["totalAccountValue"] = coinsValue + usr.money;
         result[usr.username]["coinsValue"] = coinsValue;
         result[usr.username]["money"] = usr.money;
         result[usr.username]["profitPerCoin"] = {}
+        
 
         transactions = buildDictOfPackages(usr.myTractions, prices);
 
@@ -125,9 +128,9 @@ def buildAccountsDict(prices):
 
             
 
-        
-    pprint.pprint(result)
-    return result;
+    orderedResult = OrderedDict(sorted(result.items(), key=lambda x : x[1]["totalAccountValue"], reverse=True))
+    pprint.pprint(orderedResult)
+    return orderedResult;
 
         
     # result = {u.username:u.money - startMoney for u in usrs}

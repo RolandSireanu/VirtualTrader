@@ -13,5 +13,6 @@ if structure changes => ./manage.py db stamp heads
 
 ===== Start the rq and rq rq_scheduler
 insinde Work/Trader execute the following commands : 
-rqscheduler
-/Users/sireanuroland/Library/Python/3.9/bin/rq worker --with-scheduler
+for python3 rqscheduler !!!!!!!!!
+/Users/sireanuroland/Library/Python/3.9/bin/rqworker
+

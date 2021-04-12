@@ -24,6 +24,7 @@ db = SQLAlchemy(app);
 from .CryptoReader import CryptoReader
 cryptoReader = CryptoReader();
 
+from . import filters
 from . import Views
 from . import Models
 from . import errorHandler
