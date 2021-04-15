@@ -135,6 +135,44 @@ body {
 }
 
 
+.top3Players {
+  display: flex;
+  direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  height: 350px;
+}
+
+.top3Players > *:nth-child(1){
+  width: 300px;
+  height: 300px;
+  align-self: flex-end;
+  order: 2;
+
+}
+
+.top3Players > *:nth-child(2){
+  width: 200px;
+  height: 300px;
+  order: 1;
+}
+
+.top3Players > *:nth-child(3){
+  width: 200px;
+  height: 300px;
+  order: 3;
+}
+
+.createShadow {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* 
+.top3Players > * :nth-child(2){
+  width: 100px;
+  height: 100px;
+} */
+
 
 .coinSubTotal {
   background-color: rgb(192, 200, 221);
@@ -152,6 +190,15 @@ body {
   margin-left: 20px;
 }
 
+.avatar {
+  vertical-align: middle;
+  margin: auto;
+  margin-top: 20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
 hr {
   box-sizing: content-box;
   height: 0;
@@ -167,6 +214,8 @@ p {
   margin-top: 0;
   margin-bottom: 1rem;
 }
+
+
 
 abbr[title],
 abbr[data-original-title] {

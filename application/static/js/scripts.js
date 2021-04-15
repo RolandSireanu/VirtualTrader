@@ -114,3 +114,11 @@ function BuyPackage(compId){
         location.reload();
     })
 }
+
+function createShadow(element){
+    element.classList.add("createShadow");
+}
+
+function destroyShadow(element){
+    element.classList.remove("createShadow");
+}
