@@ -40,10 +40,16 @@ def register():
 @app.route("/leaderboard")
 def leaderboard():
 
-    #Read coins value from rest api 
-    prices = cryptoReader.readPrices()
-    accounts = ProcesessRequest.buildAccountsDict(prices=prices);    
-    return render_template("tables.html",accounts=accounts);
+    if("user" in session):
+        #Get current user from database
+        userModel = UserModel.query.filter_by(username=session.get("user")).first();
+
+        #Read coins value from rest api 
+        prices = cryptoReader.readPrices()
+        accounts = ProcesessRequest.buildAccountsDict(prices=prices);    
+        return render_template("tables.html", accounts=accounts, user=session["user"], money=round(userModel.money,2));
+    else:
+        return render_template("login.html");
 
 @app.route("/dashboard")
 def dashboard():

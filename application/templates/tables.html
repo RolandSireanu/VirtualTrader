@@ -1,143 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Tables - SB Admin</title>
-        <link href="static/css/styles.css" rel="stylesheet" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
-    </head>
-    <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.html">Virtual Trader</a>
-            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
-            <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-                <div class="input-group">
-                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
-                    </div>
-                </div>
-            </form>
-            <!-- Navbar-->
-            <ul class="navbar-nav ml-auto ml-md-0">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">Settings</a>
-                        <a class="dropdown-item" href="#">Activity Log</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="login.html">Logout</a>
-                    </div>
-                </li>
-            </ul>
-        </nav>
-        <div id="layoutSidenav">
-            <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
-                        <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="dashboard">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard
-                            </a>
-                        </div>
-                    </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        
-                    </div>
-                </nav>
-            </div>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid">                        
-                        <br><br>
-                        <div class="accordion" id="accordionExample">
-                            {% for name, account in accounts.items() %}
-                            {% if loop.first %}
-                                {% set expanded=true %} 
-                            {% else: %}
-                                {% set expanded=false %}
-                            {% endif %}
-                            <div class="accordion-item">
-                              <h2 class="accordion-header" id="heading{{ loop.index }}">
-                                <button class="accordion-button {{ 'collapsed' if expanded==false else '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="{{ expanded }}" aria-controls="collapse{{ loop.index }}">
-                                    {% set subtotal= account["coinsValue"] + account["money"] %}
-                                    {% set profit= subtotal - 100000 %}
-                                    <div class="flex-account">
-                                        <div style="color: {{ 'green' if profit >= 0 else 'red' }} ;">
-                                            {{name}}   :   {{ (account["coinsValue"] + account["money"])|roundDecimals }}$
-                                        </div>
-                                        <div style="color: {{ 'green' if profit >= 0 else 'red' }} ;">
-                                            Profit   :   {{ profit |roundDecimals }}$
-                                        </div>
-                                        <div style="text-align: left;">
-                                            <div style="color: {{ 'green' if profit >= 0 else 'red' }} ; text-align: center;">
-                                            Profit   :   {{ ((profit/100000)*100)|roundDecimals }} %
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </button>
-                              </h2>
-                              <div id="collapse{{ loop.index }}" class="accordion-collapse collapse {{ 'show' if expanded else '' }}" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <div class="flex-coin">
-                                        {%  for coin, value in account["profitPerCoin"].items() %}
-                                        {% set profitAccount = (value[1] - value[0])|roundDecimals %}
-                                        <span class="badge badge-pill badge-{{ 'success' if profitAccount >=0 else 'danger' }}" style="font-size: 15px; margin-bottom: 5px;">
-                                            {{ coin }} : {{ profitAccount }} $ 
-                                            {% if profitAccount >=0 %}
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
-                                                </svg>
-                                            {% else: %}
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
-                                                </svg>
-                                            {% endif %}
-                                        </span>
-                                                                            
-                                        {% endfor %}                                    
-                                    </div>
+{% extends "BaseTemplates/base.html" %}
 
-                                </div>
-                              </div>
-                            </div>
-                            {% endfor %}                            
-                          </div>                        
-                    </div>
-                </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2020</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
+{% block linksAndScripts %}
+<link href="static/css/styles.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
+    crossorigin="anonymous" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block mainContent %}
+<div class="container-fluid">
+    <br><br>
+    <div class="accordion" id="accordionExample">
+        {% for name, account in accounts.items() %}
+        {% if loop.first %}
+        {% set expanded=true %}
+        {% else: %}
+        {% set expanded=false %}
+        {% endif %}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading{{ loop.index }}">
+                <button class="accordion-button {{ 'collapsed' if expanded==false else '' }}" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="{{ expanded }}"
+                    aria-controls="collapse{{ loop.index }}">
+                    {% set subtotal= account["coinsValue"] + account["money"] %}
+                    {% set profit= subtotal - 100000 %}
+                    <div class="flex-account">
+                        <div style="color: {{ 'green' if profit >= 0 else 'red' }} ;">
+                            {{name}} : {{ (account["coinsValue"] + account["money"])|roundDecimals }}$
+                        </div>
+                        <div style="color: {{ 'green' if profit >= 0 else 'red' }} ;">
+                            Profit : {{ profit |roundDecimals }}$
+                        </div>
+                        <div style="text-align: left;">
+                            <div style="color: {{ 'green' if profit >= 0 else 'red' }} ; text-align: center;">
+                                Profit : {{ ((profit/100000)*100)|roundDecimals }} %
                             </div>
                         </div>
                     </div>
-                </footer>
+
+                </button>
+            </h2>
+            <div id="collapse{{ loop.index }}" class="accordion-collapse collapse {{ 'show' if expanded else '' }}"
+                aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <div class="flex-coin">
+                        {% for coin, value in account["profitPerCoin"].items() %}
+                        {% set profitAccount = (value[1] - value[0])|roundDecimals %}
+                        <span class="badge badge-pill badge-{{ 'success' if profitAccount >=0 else 'danger' }}"
+                            style="font-size: 15px; margin-bottom: 5px;">
+                            {{ coin }} : {{ profitAccount }} $
+                            {% if profitAccount >=0 %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-arrow-up" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+                            </svg>
+                            {% else: %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-arrow-down" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
+                            </svg>
+                            {% endif %}
+                        </span>
+
+                        {% endfor %}
+                    </div>
+
+                </div>
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="{{ url_for('static', filename='assets/demo/datatables-demo.js') }}"></script>
-    </body>
-</html>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block bottomScripts %}
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"
+    integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"
+    integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+    crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='assets/demo/datatables-demo.js') }}"></script>
+{% endblock %}

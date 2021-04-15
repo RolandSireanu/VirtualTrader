@@ -2,19 +2,49 @@
 Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#292b2c';
 
-async function getData(coin){
-
+async function getDataFromAPI(coin) {
   let startPoint = Math.floor((Date.now() / 1000)) - (3600*24*30)
 
-  let response = await fetch("https://coingecko.p.rapidapi.com/coins/"+coin+"/market_chart/range?from="+String(startPoint)+"&vs_currency=usd&to="+String(Date.now()), {
-    "method": "GET",
-    "headers": {
-      "x-rapidapi-key": "1057bfb784msh8fa5180c3b466bdp1802bcjsnf6263a56e4b1",
-      "x-rapidapi-host": "coingecko.p.rapidapi.com"
+  while(true){
+    
+    response = await fetch("https://coingecko.p.rapidapi.com/coins/"+coin+"/market_chart/range?from="+String(startPoint)+"&vs_currency=usd&to="+String(Date.now()), {
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-key": "1057bfb784msh8fa5180c3b466bdp1802bcjsnf6263a56e4b1",
+            "x-rapidapi-host": "coingecko.p.rapidapi.com"
+        }
+        });
+    
+    if (response.ok == true) {
+        break;
     }
-  });
+    else
+    {
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        console.log("Coins API fail  ")
+    }
+  }
+    return response;
+}
+
+async function getData(coin){
+
+  
+  let response = null
+  let ok = false;
+
+  
+    try {         
+      response = await getDataFromAPI(coin)
+    }catch(e){
+      console.log("Erro from server !!! ");
+      console.log(e)
+    }
+
+
 
   let data = await response.json();
+  
   let values = [];
   let date = [];
 
