@@ -32,7 +32,7 @@ def register():
             ProcesessRequest.AddUserToDB(username=username, password=pswd);            
             return redirect(url_for("login"));
         else:
-            return render_template("register.html", valid="is-invalid", message="User already exists !")
+            return render_template("register.html", valid="is-invalid", message="User already exists !"),400
 
 
     return render_template("register.html")
@@ -66,19 +66,17 @@ def dashboard():
         #Read all transactions 
         transactions = userModel.myTractions;
         dictOfPackages = ProcesessRequest.buildDictOfPackages(transactions, prices);
-        print(dictOfPackages);
+        
 
         #Read all transactions associated with current user
         transactions = userModel.myTractions;
 
         total = ProcesessRequest.computeTotal(transactions, howMany, prices);
-        
-        print(len(transactions));
 
         coins = [(p[0],p[1],howMany[p[0]]) for p in prices]
         coins.sort(key = lambda e : e[0]);
 
-        return render_template("index.html", coins=coins, user=session["user"], money=round(userModel.money,2), total=total, dictOfPackages=dictOfPackages);
+        return make_response(render_template("index.html", coins=coins, user=session["user"], money=round(userModel.money,2), total=total, dictOfPackages=dictOfPackages), 200)
     else:
         return redirect(url_for("login"));
 
@@ -97,30 +95,31 @@ def login():
     if request.method == "GET":
         return render_template("login.html",valid="")
     elif request.method == "POST":
-        username = request.form.get("usr");
+        username = request.form.get("usr");        
         password = request.form.get("pswd");
-
-        if(username == "" or password == ""):
+        
+        if(username == "" or password == ""):            
             flash("Fill in username and password !","danger")
-        else:
-            print(UserModel.query.all())
+        else:            
+            # print(UserModel.query.all())
             usr = UserModel.query.filter_by(username=username).first()
-            if usr is not None:
+        
+            if usr is not None:        
                 if usr.password == password:
                     session["user"] = usr.username;
                     res = make_response(redirect(url_for("dashboard")))
                     token = secrets.token_hex(nbytes=4);
                     session["token"] = token;
-                    res.set_cookie(key="token",value=token, expires="None",path="/", secure="False");
+                    res.set_cookie(key="token",value=token, expires="None",path="/", secure="False");                    
                     return res
                 else:
                     flash("Invalid username or password", "danger")
             else:
                 valid = False;
-                flash("User doesn't exists in database","danger")
+                flash("User doesn't exists in the database","danger")
                  
         
-        return render_template("login.html",valid="is-invalid", userBackup=username);
+        return render_template("login.html",valid="is-invalid", userBackup=username),403;
     
 @app.route("/logout", methods=["GET"])
 def logout():

@@ -34,6 +34,51 @@
             {% endif %}
             {% endfor %}
         </div>
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <!-- <th scope="col"></th> -->
+                <th scope="col">Account</th>
+                <th scope="col">Profit $</th>
+                <th scope="col">Profit %</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for name, account in accounts.items() %} 
+            {% set subtotal= account["coinsValue"] + account["money"] %}
+            {% set profit= subtotal - 100000 %}
+              <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>
+                    <div class="genFlexContainer">
+                        <div>
+                            {{ name }}                        
+                        </div>
+                        <div class="starsClass">
+                        {% if loop.index <= 3 %}
+                            <div>
+                            {% for i in range(4-loop.index) %}                        
+                                <i class="fa fa-star" aria-hidden="true"></i>                            
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                        </div>
+                    </div>
+                </td>
+                
+                
+                <td>{{ subtotal|roundDecimals }}</td>
+                <td>{{ profit|roundDecimals }}</td>
+                <td>{{ ((profit/100000)*100)|roundDecimals }}</td>
+              </tr>
+            {% endfor %}  
+            </tbody>
+          </table>
+        
+
+
     </div>
 </div>
 

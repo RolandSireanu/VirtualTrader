@@ -140,7 +140,7 @@ body {
   direction: row;
   justify-content: space-evenly;
   flex-wrap: wrap;
-  height: 350px;
+  
 }
 
 .top3Players > *:nth-child(1){
@@ -173,6 +173,30 @@ body {
   height: 100px;
 } */
 
+.genFlexContainer{
+  display: flex;
+  direction: row;
+  justify-content:space-between;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 500px) {
+  .genFlexContainer {
+    flex-direction: column;
+  }
+}
+
+.genFlexContainer >*:nth-child(1) {
+  flex-basis: 50%;
+}
+
+.genFlexContainer >*:nth-child(2) {
+  flex-basis: 48%;
+}
+
+.starsClass {
+  margin-right: 0px;
+}
 
 .coinSubTotal {
   background-color: rgb(192, 200, 221);

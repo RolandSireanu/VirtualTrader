@@ -18,7 +18,6 @@ elif (os.getenv("FLASK_ENV") == "Testing"):
 else:
         app.config.from_object("application.config.DevelopmentEnv");
 
-
 db = SQLAlchemy(app);
 
 from .CryptoReader import CryptoReader

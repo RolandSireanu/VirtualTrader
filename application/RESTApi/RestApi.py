@@ -10,8 +10,7 @@ def coinsEndpoint(stock_id=None):
     if(request.method == "POST"):
         if(request.is_json):
             if(request.cookies.get("tooken") == session.get("tooken")):
-                data = request.get_json();
-                print(data)                
+                data = request.get_json();       
                 ProcesessRequest.Transaction(data["coin"], session["user"], int(data["quantity"]), "buy");
                 return make_response(jsonify({"message":"success"}), 200);
             else:
@@ -30,8 +29,10 @@ def coinsEndpoint(stock_id=None):
 
 @app.route("/api/wallet", methods=["GET"])
 def walletEndpoint():
+    
     if(request.cookies.get("tooken") == session.get("tooken")):
         crypto = ProcesessRequest.GetCryptoFromDB(session["user"]);
         return make_response(jsonify(crypto), 200);
 
-    return make_response(400);
+    #Access denied
+    return make_response(403);

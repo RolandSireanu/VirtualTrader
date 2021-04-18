@@ -22,7 +22,6 @@ def updatePricesDb():
 
     pricesModel = Models.PricesModel.query.first();
     for k,v in data.items():
-        print(k,v)
         setattr(pricesModel,k,v["usd"]);
 
     db.session.commit();
@@ -43,6 +42,7 @@ class CryptoReader:
 
     def readPrices(self):
         pricesModel = Models.PricesModel.query.first();
+        
         return [(k,getattr(pricesModel, k)) for k in CryptoReader.coinsRequested];
 
     # def readStats(self):
