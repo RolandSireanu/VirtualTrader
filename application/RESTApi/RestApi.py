@@ -1,5 +1,6 @@
 from .. import ProcesessRequest
 from .. import app
+from .. import dataRangeReader
 from flask import request, redirect, make_response, jsonify, url_for, session
 
 
@@ -36,3 +37,8 @@ def walletEndpoint():
 
     #Access denied
     return make_response(403);
+
+@app.route("/api/dataRange/<coin>", methods=["GET"])
+def dataRange(coin):
+    data = dataRangeReader.readPricesOverTimer(coin)
+    return make_response(jsonify(data),200);

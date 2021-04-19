@@ -45,19 +45,6 @@ class CryptoReader:
         
         return [(k,getattr(pricesModel, k)) for k in CryptoReader.coinsRequested];
 
-    # def readStats(self):
-    #     for c in CryptoReader.coinsRequested:
-
-    #         endPoint = f"/coins/{c}/market_chart/range";
-    #         startPoint = (int)time.time() - (3600*24*30);
-    #         now = (int)time.time();
-            
-
-    #         querystring = {"from":str(startPoint),"vs_currency":"usd","to":str(now)}
-    #         data = __makeGetRequest(CryptoReader.url+endPoint, CryptoReader.headers, querystring);
-
-    #     pass
-
     def __makeGetRequest(self, url, headers, params):
         response = requests.request("GET", url, headers=headers, params=params)
         data = json.loads(response.text)

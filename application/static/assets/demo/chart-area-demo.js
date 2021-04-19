@@ -7,13 +7,17 @@ async function getDataFromAPI(coin) {
 
   while(true){
     
-    response = await fetch("https://coingecko.p.rapidapi.com/coins/"+coin+"/market_chart/range?from="+String(startPoint)+"&vs_currency=usd&to="+String(Date.now()), {
-        "method": "GET",
-        "headers": {
-            "x-rapidapi-key": "1057bfb784msh8fa5180c3b466bdp1802bcjsnf6263a56e4b1",
-            "x-rapidapi-host": "coingecko.p.rapidapi.com"
-        }
-        });
+    // response = await fetch("https://coingecko.p.rapidapi.com/coins/"+coin+"/market_chart/range?from="+String(startPoint)+"&vs_currency=usd&to="+String(Date.now()), {
+    //     "method": "GET",
+    //     "headers": {
+    //         "x-rapidapi-key": "1057bfb784msh8fa5180c3b466bdp1802bcjsnf6263a56e4b1",
+    //         "x-rapidapi-host": "coingecko.p.rapidapi.com"
+    //     }
+    //     });
+
+    response = await fetch(`${window.origin}/api/dataRange/`+coin, {
+      "method": "GET"
+    });
     
     if (response.ok == true) {
         break;
@@ -28,20 +32,15 @@ async function getDataFromAPI(coin) {
 }
 
 async function getData(coin){
-
-  
   let response = null
   let ok = false;
 
-  
     try {         
       response = await getDataFromAPI(coin)
     }catch(e){
       console.log("Erro from server !!! ");
       console.log(e)
     }
-
-
 
   let data = await response.json();
   

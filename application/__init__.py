@@ -21,7 +21,10 @@ else:
 db = SQLAlchemy(app);
 
 from .CryptoReader import CryptoReader
+from .DataRangeReader import DataRangeReader
+
 cryptoReader = CryptoReader();
+dataRangeReader = DataRangeReader();
 
 from . import filters
 from . import Views
