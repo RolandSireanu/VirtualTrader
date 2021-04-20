@@ -5,26 +5,23 @@ from . import rq
 import ipdb
 from . import Models
 from . import db
+from . import redis_client
 
-class DataRangeReader:
-    headers = {
+@rq.job
+def updatePricesDataRange():
+
+    def GetRequest(coin):
+        headers = {
         'x-rapidapi-key': "1057bfb784msh8fa5180c3b466bdp1802bcjsnf6263a56e4b1",
         'x-rapidapi-host': "coingecko.p.rapidapi.com"
-        }
+        };
 
-    def readPricesOverTimer(self, coin):
-        response = self.__makeGetRequest(coin)
-        return response;
-
-
-    def __makeGetRequest(self, coin):
         startPoint = int(time.time()) - (3600*24*30)
         url = f"https://coingecko.p.rapidapi.com/coins/{coin}/market_chart/range"
         querystring = {"from":str(startPoint),"vs_currency":"usd","to":str(int(time.time()))}
         
         response = requests.request("GET", url, headers=DataRangeReader.headers, params=querystring)
-        if(response.status_code == 200):
-            ipdb.set_trace()
+        if(response.status_code == 200):            
             print(f"Response : {response}")
             data = json.loads(response.text)
             listPrices = data["prices"]
@@ -43,9 +40,25 @@ class DataRangeReader:
                         break;
             timePoints[len(timePoints)-1] = listPrices[len(listPrices)-1];
 
-            
-            print(timePoints)
-            
+            return timePoints;
+    
+    for coin in ["bitcoin","ethereum","cardano","ripple","monero"]:
+        #Read timepoints from rest api
+        tp = GetRequest(coin);        
+        #Set encoded timepoints in redis
+        redis_client.set(coin,json.dumps(tp));
+
+updatePricesDataRange.cron("* * * * *", "updatePricesDataRange-crono");
+
+class DataRangeReader:
+    headers = {
+        'x-rapidapi-key': "1057bfb784msh8fa5180c3b466bdp1802bcjsnf6263a56e4b1",
+        'x-rapidapi-host': "coingecko.p.rapidapi.com"
+        }
+
+    def readPricesOverTimer(self, coin):
+        jsonObject = redis_client.get(coin)
+        data = json.loads(jsonObject);
         return {
-            "prices" : timePoints
+            "prices":data
         }

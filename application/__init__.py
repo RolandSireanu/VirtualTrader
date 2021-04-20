@@ -1,13 +1,14 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_redis import FlaskRedis
 import os
 from datetime import timedelta
 
 from flask_rq2 import RQ
 
-
 app = Flask(__name__)
 rq = RQ(app)
+redis_client = FlaskRedis(app);
 
 rq.init_app(app);
 

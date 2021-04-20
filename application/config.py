@@ -10,6 +10,7 @@ class BaseConfig(object):
     TESTING = False
     SESSION_COOKIE_SECURE=False 
     RQ_REDIS_URL = 'redis://localhost:6379/0'
+    REDIS_URL = 'redis://localhost:6379/1'
     RQ_SCHEDULER_INTERVAL = 10
     #PERMANENT_SESSION_LIFETIME = timedelta(minutes=5);
 
