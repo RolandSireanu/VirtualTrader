@@ -6,8 +6,9 @@ export DATABASE_URL="postgresql://postgres:1234@localhost:5432/trader"
 
 ===== Migration ===
 python3 manage.py db init
-python3 manage.py db upgrade
 python3 manage.py db migrate
+python3 manage.py db upgrade
+delete from alembic_version;
 
 if structure changes => ./manage.py db stamp heads
 

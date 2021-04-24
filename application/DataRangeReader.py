@@ -57,8 +57,14 @@ class DataRangeReader:
         }
 
     def readPricesOverTimer(self, coin):
+        data = None;
         jsonObject = redis_client.get(coin)
-        data = json.loads(jsonObject);
+        if(jsonObject != None):
+            data = json.loads(jsonObject);
+            return {
+                "prices":data
+            };
+
         return {
-            "prices":data
-        }
+            "prices": None
+        };

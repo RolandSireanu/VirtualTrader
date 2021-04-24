@@ -18,6 +18,7 @@ def coinsEndpoint(stock_id=None):
                 return make_response(jsonify({"message":"Please log in first"}), 400)
         else:
             return make_response(jsonify({"message":"Request doesn't contain json !"}),400);
+            
     elif(request.method == "DELETE"):
         if(request.is_json):
             if(request.cookies.get("tooken") == session.get("tooken")):
@@ -41,4 +42,7 @@ def walletEndpoint():
 @app.route("/api/dataRange/<coin>", methods=["GET"])
 def dataRange(coin):
     data = dataRangeReader.readPricesOverTimer(coin)
-    return make_response(jsonify(data),200);
+    if(data["prices"] != None):
+        return make_response(jsonify(data),200);
+    else:
+        return make_response(jsonify(data),400);

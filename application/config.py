@@ -12,7 +12,15 @@ class BaseConfig(object):
     RQ_REDIS_URL = 'redis://localhost:6379/0'
     REDIS_URL = 'redis://localhost:6379/1'
     RQ_SCHEDULER_INTERVAL = 10
-    #PERMANENT_SESSION_LIFETIME = timedelta(minutes=5);
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=5);
+    SESSION_REFRESH_EACH_REQUEST = True;
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USERNAME = os.environ.get("USER_EMAIL");
+    MAIL_PASSWORD = os.environ.get("PASSWORD_EMAIL");
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    
 
 class TestingEnv(BaseConfig):
     TESTING = True 

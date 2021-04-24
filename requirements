@@ -6,3 +6,4 @@ rq
 rq_scheduler
 Flask-RQ2
 flask-redis
+Flask-Mail

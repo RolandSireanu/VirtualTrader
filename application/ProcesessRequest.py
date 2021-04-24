@@ -1,7 +1,15 @@
 from . import db
 from .CryptoReader import CryptoReader
 from .Models import UserModel, Coins, TransactionModel
+# from . import urlSerializer
+from itsdangerous import TimestampSigner
+from . import mail
+from . import app
+from . import UrlGeneration
+
 from collections import OrderedDict
+from flask import url_for, render_template
+from flask_mail import Message
 import ipdb
 import pprint
 
@@ -56,8 +64,8 @@ def Transaction(coin, user, quantity, action, transactionId=-1, pricePaid=0):
         print("ERROR: Undefined action ! ");
     
 
-def AddUserToDB(username, password):
-    user = UserModel(username=username, password=password, money=100000.0);
+def AddUserToDB(username, password, email):
+    user = UserModel(username=username, password=password, money=100000.0, email=email);
     db.session.add(user)
 
     coinModel = Coins(uid=user.id)
@@ -65,6 +73,11 @@ def AddUserToDB(username, password):
     db.session.add(coinModel)
     db.session.commit();
     
+def updateUserPassword(originalEmail, password1):
+    user = UserModel.query.filter_by(email=originalEmail).first();
+    user.password = password1;
+    db.session.commit();
+
 def GetCryptoFromDB(username):
     currentUser = UserModel.query.filter_by(username=username).first()
     return currentUser.coinsOwned[0].getCoins()
@@ -135,3 +148,37 @@ def buildAccountsDict(prices):
         
     # result = {u.username:u.money - startMoney for u in usrs}
     
+def findEmailInDataBase(email):
+    user = UserModel.query.filter_by(email=email).first();
+    if(user != None):
+        print("User found in database")
+        return True
+    else:
+        print("User not found in database")
+        return False
+
+def sendEmail(email):
+    urlGen = UrlGeneration.UrlGeneration();
+    #Get absolute path , send it through email
+    link = urlGen.signEmail(email);
+    test = urlGen.unsignEmail(email)
+    # link = generateLink(email);
+    msg = Message(sender = 'vrttrdtest@gmail.com', recipients = [email])
+    # msg.body = "Hello, if you have requested a password reset , please access the link below \n" + "<a href="+link+"> link </a>";
+    msg.subject = "VirtualTrader password reset";
+    msg.html = render_template("resetEmail.html", link=link);
+    ipdb.set_trace();
+    mail.send(msg)
+
+# def generateLink(email):
+
+#     signer = TimestampSigner(secret_key=app.config.get("SECRET_KEY"), salt="reset-password");
+#     tokenUrl = signer.sign(email);
+#     tempUrl = url_for("resetPassword", token=tokenUrl, _external=True);
+#     return tempUrl;
+
+# def getOriginalEmail(token):
+
+#     return urlSerializer.loads(token, salt="recover-key");
+    
+

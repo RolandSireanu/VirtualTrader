@@ -6,6 +6,7 @@ class UserModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), unique=False, nullable=False)
+    email = db.Column(db.String(256), unique=True, nullable=True)
     money = db.Column(db.Float, nullable=False)
     
     coinsOwned = db.relationship("Coins", back_populates="userOwner", uselist=True, foreign_keys="[Coins.uid]")

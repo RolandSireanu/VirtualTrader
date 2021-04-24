@@ -173,6 +173,13 @@ body {
   height: 100px;
 } */
 
+.login-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+
 .genFlexContainer{
   display: flex;
   direction: row;
