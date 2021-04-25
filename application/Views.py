@@ -199,7 +199,10 @@ def logout():
 
     resp = make_response(redirect(url_for("login")));
     resp.set_cookie("token",expires=0);
-    session.pop("user");
+    try:
+        session.pop("user");
+    except:
+        print("Trying to logout an expired session ");
 
 
     return resp;

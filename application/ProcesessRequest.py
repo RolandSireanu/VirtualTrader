@@ -167,7 +167,6 @@ def sendEmail(email):
     # msg.body = "Hello, if you have requested a password reset , please access the link below \n" + "<a href="+link+"> link </a>";
     msg.subject = "VirtualTrader password reset";
     msg.html = render_template("resetEmail.html", link=link);
-    ipdb.set_trace();
     mail.send(msg)
 
 # def generateLink(email):

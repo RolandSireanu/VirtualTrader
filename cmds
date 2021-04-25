@@ -17,3 +17,6 @@ insinde Work/Trader execute the following commands :
 for python3 rqscheduler !!!!!!!!!
 /Users/sireanuroland/Library/Python/3.9/bin/rqworker
 
+======== Docker ======== 
+docker run --network trader_internalnetwork -it --entrypoint /bin/bash a2e14fead383
+docker inspect trader_redis-server_1 -f "{{json .NetworkSettings.Networks }}"

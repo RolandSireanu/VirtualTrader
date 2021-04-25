@@ -11,7 +11,7 @@ services:
         volumes:
             - ${HOME}/postgresDB/:/var/lib/postgresql/data
         networks:
-            - default
+            - internalnetwork
         # environment:
         #     - POSTGRES_USER=postgres
         #     - POSTGRES_PASSWORD=1234
@@ -23,11 +23,27 @@ services:
         environment:
             - PGADMIN_DEFAULT_EMAIL=sireanu.roland@gmail.com
             - PGADMIN_DEFAULT_PASSWORD=1234
+        networks:
+            - internalnetwork
+    
+    # rqworker:
+    #     build: ./RqWorker
+    #     networks: 
+    #         - internalnetwork
+
+    # rqscheduler:
+    #     build: ./RqScheduler
+    #     networks:
+    #         - internalnetwork
 
     redis-server:
         image: redis:latest
+        networks:
+            - internalnetwork
         ports:
             - 6379:6379
+
+
 
     # update-prices:
     #     build: ./UpdatePrices
