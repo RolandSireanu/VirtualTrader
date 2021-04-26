@@ -43,7 +43,17 @@ services:
         ports:
             - 6379:6379
 
-
+    backend:
+        build: .
+        networks:
+            - internalnetwork
+        ports:
+            - 8001:5000
+        volumes:
+            - ./application:/application
+        depends_on:
+            - redis-server
+            - db
 
     # update-prices:
     #     build: ./UpdatePrices

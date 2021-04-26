@@ -1,5 +1,4 @@
 psycopg2
-psycopg2-binary just on MacOs
 Flask-Script
 flask_migrate
 rq
@@ -7,3 +6,5 @@ rq_scheduler
 Flask-RQ2
 flask-redis
 Flask-Mail
+requests
+ipdb
