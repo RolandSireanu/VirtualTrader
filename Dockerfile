@@ -2,6 +2,8 @@ FROM python:3.9
 ENV PYTHONBUFFERED 1
 ENV REDIS_HOST redis-server
 ENV DATABASE_HOST db
+ENV POSTGRES_PASSWORD 1234
+ENV POSTGRES_DB trader
 WORKDIR /application
 COPY requirements.txt /application/requirements.txt
 

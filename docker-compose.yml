@@ -3,18 +3,19 @@ version: '3.7'
 services:
 
     db:
-        image: postgres:latest
-        hostname: database
-        user: postgres
+        image: postgres:13
+        restart: always
         ports:
             - 5432:5432
         volumes:
-            - ${HOME}/postgresDB/:/var/lib/postgresql/data
+                - postgres-vol:/var/lib/postgresql/data
         networks:
             - internalnetwork
-        # environment:
-        #     - POSTGRES_USER=postgres
-        #     - POSTGRES_PASSWORD=1234
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=1234
+            - POSTGRES_DB=trader 
+        
         
     adminer:
         image: dpage/pgadmin4
@@ -48,12 +49,15 @@ services:
         networks:
             - internalnetwork
         ports:
-            - 8001:5000
+            - 5000:5000
         volumes:
             - ./application:/application
         depends_on:
             - redis-server
             - db
+        environment:
+            - DATABASE_HOST=db
+                        
 
     # update-prices:
     #     build: ./UpdatePrices
@@ -63,3 +67,6 @@ services:
 networks:
   internalnetwork:
     driver: bridge
+
+volumes:
+  postgres-vol:
