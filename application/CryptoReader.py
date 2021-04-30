@@ -21,15 +21,23 @@ def updatePricesDb():
     data = None;
     while(data == None):
         response = requests.request("GET", url+endPoint, headers=headers, params=querystring)
-        data = json.loads(response.text)
+        if response is not None :
+            data = json.loads(response.text)
+        else:
+            print("Invalid response from server,  keep trying ... ")
         print("Reading prices ... ")
         time.sleep(0.1);
 
     # return [(k,v["usd"]) for k,v in data.items()];
 
     pricesModel = Models.PricesModel.query.first();
-    for k,v in data.items():
-        setattr(pricesModel,k,v["usd"]);
+    if(pricesModel is None):
+        #First run , empty table
+        firstElement = Models.PricesModel(bitcoin=0.0, ethereum=0.0, cardano=0.0, ripple=0.0, monero=0.0);
+        db.session.add(firstElement);
+    else:
+        for k,v in data.items():
+            setattr(pricesModel,k,v["usd"]);
 
     db.session.commit();
     print("Update db !")

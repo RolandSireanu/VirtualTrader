@@ -8,3 +8,4 @@ flask-redis
 Flask-Mail
 requests
 ipdb
+gunicorn

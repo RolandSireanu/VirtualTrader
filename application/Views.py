@@ -19,10 +19,11 @@ def main_route():
 @app.route("/recoverPassword", methods=["GET", "POST"])
 def recoverPassword():
     email = request.form.get("recoverEmail")
+    originAddrOfRequest = request.headers["origin"];
     print("Email : " , email)   
     if(ProcesessRequest.findEmailInDataBase(email)):
         flash("Please check your email !", "warning");
-        ProcesessRequest.sendEmail(email);
+        ProcesessRequest.sendEmail(email, originAddrOfRequest);
 
     else:
         flash("This email doesn't exists in our databas", "danger");

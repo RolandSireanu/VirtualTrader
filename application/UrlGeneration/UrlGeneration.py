@@ -11,10 +11,11 @@ class UrlGeneration :
     def __init__(self):
         pass    
 
-    def signEmail(self, email):
+    def signEmail(self, email, originAddr):
         # signer = TimestampSigner(secret_key=app.config.get("SECRET_KEY"), salt=UrlGeneration.saltReset);
         tokenUrl = UrlGeneration.signer.sign(email);
-        tempUrl = str(url_for("resetPasswordWithToken",token=tokenUrl.decode("utf-8"), _external=True));
+        tempUrl = originAddr+str(url_for("resetPasswordWithToken",token=tokenUrl.decode("utf-8"), _external=False));
+        print("TEMP URL = ", tempUrl, flush=True)
         return tempUrl;
 
     def unsignEmail(self, link):

@@ -3,7 +3,7 @@ import os
 
 
 class BaseConfig(object):
-    SECRET_KEY="fwv32frw242ef39";
+    SECRET_KEY="8f42a73054b1749f8f58848be5e6502c";
     SQLALCHEMY_DATABASE_URI = "postgresql://postgres:1234@"+os.environ.get('DATABASE_HOST')+":5432/trader";
     SQLALCHEMY_TRACK_MODIFICATIONS = False 
     DEBUG = False

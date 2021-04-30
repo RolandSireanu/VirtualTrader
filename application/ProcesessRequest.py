@@ -157,16 +157,18 @@ def findEmailInDataBase(email):
         print("User not found in database")
         return False
 
-def sendEmail(email):
+def sendEmail(email, originAddr):
+    print("SendEmail called!");
     urlGen = UrlGeneration.UrlGeneration();
     #Get absolute path , send it through email
-    link = urlGen.signEmail(email);
+    link = urlGen.signEmail(email, originAddr);
     test = urlGen.unsignEmail(email)
     # link = generateLink(email);
     msg = Message(sender = 'vrttrdtest@gmail.com', recipients = [email])
     # msg.body = "Hello, if you have requested a password reset , please access the link below \n" + "<a href="+link+"> link </a>";
     msg.subject = "VirtualTrader password reset";
     msg.html = render_template("resetEmail.html", link=link);
+    print("MAIL_USERNAME="+app.config["MAIL_USERNAME"]);
     mail.send(msg)
 
 # def generateLink(email):

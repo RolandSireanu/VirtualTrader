@@ -6,7 +6,7 @@ services:
         image: postgres:13
         restart: always
         ports:
-            - 5432:5432
+                - 127.0.0.1:5432:5432
         volumes:
                 - postgres-vol:/var/lib/postgresql/data
         networks:
@@ -15,12 +15,21 @@ services:
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=1234
             - POSTGRES_DB=trader 
-        
+    
+    webserver:  
+        build:
+                dockerfile: ./DockerFiles/DockerNginx/Dockerfile
+                context: .
+        restart: always
+        ports: 
+           - 80:80
+        networks:
+           - internalnetwork  
         
     adminer:
         image: dpage/pgadmin4
         ports:
-            - 80:80
+            - 81:80
         environment:
             - PGADMIN_DEFAULT_EMAIL=sireanu.roland@gmail.com
             - PGADMIN_DEFAULT_PASSWORD=1234
@@ -42,14 +51,16 @@ services:
         networks:
             - internalnetwork
         ports:
-            - 6379:6379
+                - 127.0.0.1:6379:6379
 
     backend:
-        build: .
+        build:
+                context: .
+                dockerfile: ./DockerFiles/DockerFlask/Dockerfile
         networks:
             - internalnetwork
         ports:
-            - 5000:5000
+                - 127.0.0.1:5000:5000
         volumes:
             - ./application:/application
         depends_on:
@@ -57,12 +68,17 @@ services:
             - db
         environment:
             - DATABASE_HOST=db
+            - USER_EMAIL=${UEMAIL}
+            - PASSWORD_EMAIL=${PEMAIL}
                         
 
     # update-prices:
     #     build: ./UpdatePrices
     #     networks:
     #         - default
+    #mail:
+    #image: bytemark/smtp
+    #restart: always
 
 networks:
   internalnetwork:

@@ -5,12 +5,12 @@ ENV DATABASE_HOST db
 ENV POSTGRES_PASSWORD 1234
 ENV POSTGRES_DB trader
 WORKDIR /application
-COPY requirements.txt /application/requirements.txt
+COPY ./requirements.txt /application/requirements.txt
 
 RUN pip3 install -r /application/requirements.txt 
 
 COPY ./application /application 
-COPY startApp.py /startApp.py
+COPY ./startApp.py /startApp.py
 COPY ./entrypoint.sh /entrypoint.sh 
 
 RUN chmod +x /entrypoint.sh
